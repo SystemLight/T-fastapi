@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 import application
+
 from common.utils import http
 
 app = FastAPI(
@@ -27,7 +28,7 @@ application.register_app(app)
 
 
 @app.get("/")
-async def root():
+def root():
     return http.ok(data="Welcome to T-fastapi")
 
 

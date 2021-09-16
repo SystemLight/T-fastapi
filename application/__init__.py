@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from .routes import user
+from .routes import register_routes
 
 
 def register_app(app: FastAPI):
-    app.include_router(user.router)
+    register_routes(app)
