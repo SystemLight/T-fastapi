@@ -11,13 +11,13 @@ from common.utils import http
 router = APIRouter(prefix="/users")
 
 
-@router.post("/casual")
+@router.post("/casual", tags=["user"])
 def create_casual_user(user: schemas.UserCreate, db: Session = Depends(session)):
     crud.create_casual_user(db=db, user=user)
     return http.ok()
 
 
-@router.post("/", response_model=schemas.User)
+@router.post("/", response_model=schemas.User, tags=["user"])
 def create_user(user: schemas.UserCreate, db: Session = Depends(session)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -27,13 +27,13 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(session)):
     return _user
 
 
-@router.get("/", response_model=List[schemas.User])
+@router.get("/", response_model=List[schemas.User], tags=["user"])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(session)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
 
-@router.get("/{user_id}", response_model=schemas.User)
+@router.get("/{user_id}", response_model=schemas.User, tags=["user"])
 def read_user(user_id: int, db: Session = Depends(session)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
@@ -41,7 +41,7 @@ def read_user(user_id: int, db: Session = Depends(session)):
     return db_user
 
 
-@router.post("/{user_id}/items/", response_model=schemas.Item)
+@router.post("/{user_id}/items/", response_model=schemas.Item, tags=["user"])
 def create_item_for_user(
     user_id: int, item: schemas.ItemCreate, db: Session = Depends(session)
 ):

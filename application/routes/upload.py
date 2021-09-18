@@ -10,7 +10,7 @@ from ..config.upload import get_upload
 router = APIRouter(prefix="/upload")
 
 
-@router.get("/{upload_key}")
+@router.get("/{upload_key}", tags=["upload"])
 def check_upload(
     upload: Callable[[str], str] = Depends(get_upload),
     check_number: int = Query(..., alias="chunkNumber", description="当前块编号，默认从1开始"),
@@ -30,6 +30,19 @@ def check_upload(
         - [200, 201, 202]: 校验块存在
         - [400, 415, 500, 501]: 接口请求错误
 
+    使用simple-upload.js::
+
+        new Uploader({
+            target: 'http://127.0.0.1:5000/upload/default',
+            singleFile: true,
+            simultaneousUploads: 5,
+            chunkSize: 1024 * 1024 * 10,
+            successStatuses: [200, 201, 202],
+            permanentErrors: [400, 415, 500, 501],
+            testChunks: false,
+            allowDuplicateUploads: false
+          })
+
     :param total_chunks:
     :param relative_path:
     :param filename:
@@ -45,7 +58,7 @@ def check_upload(
     return JSONResponse(content=http.fail(), status_code=404)
 
 
-@router.post("/{upload_key}")
+@router.post("/{upload_key}", tags=["upload"])
 def post_upload(
     upload: Callable[[str], str] = Depends(get_upload),
     check_number: int = Form(..., alias="chunkNumber", description="当前块编号，默认从1开始"),
@@ -82,7 +95,7 @@ def post_upload(
     return http.ok(data={})
 
 
-@router.put("/{upload_key}")
+@router.put("/{upload_key}", tags=["upload"])
 def merge_upload(
     upload: Callable[[str], str] = Depends(get_upload),
     identifier: str = Query(..., alias="identifier", description="文件唯一标识")
