@@ -1,11 +1,10 @@
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
-import application
-
-from common.utils import http
+from utils import http
+from config.exception import register_exception_handler
+from app import register_all_routes
 
 app = FastAPI(
     title="T-fastapi",
@@ -24,17 +23,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.exception_handler(http.FailException)
-async def fail_exception_handler(request: Request, exc: http.FailException):
-    return JSONResponse(
-        status_code=200,
-        content=http.fail(data=exc.data, message=exc.message),
-    )
-
-
-# 注册应用包
-application.register_app(app)
+register_exception_handler(app)
+register_all_routes(app)
 
 
 @app.get("/")
@@ -52,4 +42,4 @@ if __name__ == '__main__':
         - https://fastapi.tiangolo.com/zh/tutorial/first-steps/
 
     """
-    uvicorn.run(app="main:app", host="0.0.0.0", port=5000, reload=False, debug=False)
+    uvicorn.run(app="main:app", host="0.0.0.0", port=5000, reload=True, debug=False)
