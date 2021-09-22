@@ -7,7 +7,7 @@ name = "pypi"
 fastapi = {extras = ["all"], version = "*"}
 sqlalchemy = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
-passlib = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
 
 [dev-packages]
 sqlacodegen = "*"
