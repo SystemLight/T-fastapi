@@ -1,13 +1,10 @@
 import os
-import threading
 import posixpath
 from enum import Enum
 
 from fastapi import Path
 
 from common.utils import security
-
-mutex = threading.Lock()
 
 
 class UploadPath(str, Enum):
@@ -37,12 +34,7 @@ def get_upload(upload_key: UploadPath = Path(..., description="上传文件块�
 
     def func(folder):
         path = security.safe_join(root_path, folder)
-
-        mutex.acquire()
-        if not posixpath.exists(path):
-            os.makedirs(path)
-        mutex.release()
-
+        os.makedirs(path, exist_ok=True)
         return path
 
     return func

@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///database.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///db/database.db"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
     # 默认情况下，SQLite 将只允许一个线程与其通信
