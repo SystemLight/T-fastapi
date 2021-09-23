@@ -4,7 +4,7 @@ from enum import Enum
 
 from fastapi import Path, HTTPException
 
-from utils import security, http
+from utils import security
 
 
 class UploadPath(str, Enum):

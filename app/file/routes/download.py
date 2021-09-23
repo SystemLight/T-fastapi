@@ -1,7 +1,7 @@
+from typing import Callable, Optional
+
 from fastapi import APIRouter, Depends, Query
 from starlette.responses import FileResponse
-
-from typing import Callable, Optional
 
 from ..config import get_download
 
