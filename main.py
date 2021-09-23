@@ -42,4 +42,4 @@ if __name__ == '__main__':
         - https://fastapi.tiangolo.com/zh/tutorial/first-steps/
 
     """
-    uvicorn.run(app="main:app", host="0.0.0.0", port=5000, reload=True, debug=False)
+    uvicorn.run(app="main:app", host="0.0.0.0", port=5000, reload=False, debug=False)

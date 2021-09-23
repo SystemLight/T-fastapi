@@ -11,7 +11,7 @@ from ..utils import encode_token
 router = APIRouter(prefix="/oauth")
 
 
-@router.post("/login", response_model=Token, tags=["auth-oauth"])
+@router.post("/login", response_model=Token, tags=["oauth-oauth"])
 def login(db: Session = Depends(session), form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(db, form_data.username, form_data.password)
 

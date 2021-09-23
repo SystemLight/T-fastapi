@@ -1,16 +1,19 @@
+import os
+import posixpath
 from typing import Callable
 
-from fastapi import APIRouter, File, UploadFile, Depends, Query, Form
+from fastapi import APIRouter, File, UploadFile, Depends, Query, Form, Body
 from fastapi.responses import JSONResponse
 
 from utils import http
 from utils.security import safe_join
 from ..config import get_upload
+from ..schemas.upload_schema import UploadSchema
 
 router = APIRouter(prefix="/upload")
 
 
-@router.get("/{upload_key}", tags=["upload-upload"])
+@router.get("/{upload_key}", tags=["file-upload"])
 def check_upload(
     upload: Callable[[str], str] = Depends(get_upload),
     check_number: int = Query(..., alias="chunkNumber", description="当前块编号，默认从1开始"),
@@ -32,6 +35,7 @@ def check_upload(
 
     使用simple-upload.js::
 
+        https://github.com/simple-uploader/Uploader/blob/develop/README_zh-CN.md
         new Uploader({
             target: 'http://127.0.0.1:5000/upload/default',
             singleFile: true,
@@ -88,25 +92,34 @@ def post_upload(
     :return:
 
     """
-    with open(safe_join(upload(identifier), str(check_number)), "wb") as fp:
+    folder = upload(identifier)
+    with open(safe_join(folder, str(check_number)), "wb") as fp:
         for data in file.file:
             fp.write(data)
     file.file.close()
-    return http.ok(data={})
+    return http.ok()
 
 
 @router.put("/{upload_key}", tags=["upload-upload"])
 def merge_upload(
     upload: Callable[[str], str] = Depends(get_upload),
-    identifier: str = Query(..., alias="identifier", description="文件唯一标识")
+    upload_schema: UploadSchema = Body(..., description="上传文件实体信息")
 ):
     """
 
     合并文件块完成文件上传
 
     :param upload: 上传路径获取函数
-    :param identifier: 文件唯一标识
+    :param upload_schema: 上传文件实体信息
     :return:
 
     """
-    return http.ok(data={})
+    folder = upload(upload_schema.identifier)
+    with open(posixpath.join(folder, upload_schema.filename), "wb") as target_fp:
+        for i in range(1, upload_schema.chunk_size + 1):
+            chunk_path = posixpath.join(folder, str(i))
+            with open(chunk_path, "rb") as chunk_fp:
+                target_fp.write(chunk_fp.read())
+                target_fp.flush()
+            os.remove(chunk_path)
+    return http.ok()

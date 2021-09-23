@@ -4,7 +4,6 @@ from jose import JWTError
 from sqlalchemy.orm import Session
 
 from utils import http
-from utils.auth import verify_password
 from utils.constant import *
 from ..models.user_model import TUser
 from ..schemas.token_schema import TokenData
