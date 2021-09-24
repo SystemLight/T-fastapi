@@ -73,3 +73,12 @@ class TestPython(unittest.TestCase):
         print(get_password_hash("hash"))
         self.assertFalse(verify_password(b"password", b"$2b$12$ylpw.Bac9Zm3Ey29WueqlefQbv.WvVcfbHb62PI9d4QXTFMJYSRFm"))
         self.assertTrue(verify_password(b"hash", b"$2b$12$ylpw.Bac9Zm3Ey29WueqlefQbv.WvVcfbHb62PI9d4QXTFMJYSRFm"))
+
+    def test_cachelib(self):
+        """
+
+        cachelib
+
+        :return:
+
+        """

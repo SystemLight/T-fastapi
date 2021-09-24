@@ -8,6 +8,8 @@ fastapi = {extras = ["all"], version = "*"}
 sqlalchemy = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
 passlib = {extras = ["bcrypt"], version = "*"}
+requests = "*"
+cachelib = "*"
 
 [dev-packages]
 sqlacodegen = "*"

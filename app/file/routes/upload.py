@@ -62,7 +62,7 @@ def check_upload(
     return JSONResponse(content=http.fail(), status_code=404)
 
 
-@router.post("/{upload_key}", tags=["upload-upload"])
+@router.post("/{upload_key}", tags=["file-upload"])
 def post_upload(
     upload: Callable[[str], str] = Depends(get_upload),
     check_number: int = Form(..., alias="chunkNumber", description="当前块编号，默认从1开始"),
@@ -100,7 +100,7 @@ def post_upload(
     return http.ok()
 
 
-@router.put("/{upload_key}", tags=["upload-upload"])
+@router.put("/{upload_key}", tags=["file-upload"])
 def merge_upload(
     upload: Callable[[str], str] = Depends(get_upload),
     upload_schema: UploadSchema = Body(..., description="上传文件实体信息")
